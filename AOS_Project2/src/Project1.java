@@ -1,6 +1,10 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -69,10 +73,13 @@ public class Project1 {
         send.start();
 
         recv.start();
-        if (Project1.processNo == 2 || Project1.processNo == 1) {
+       // for(int i=0;i<5;i++)
+        //{
+        if (Project1.processNo == 3 ||Project1.processNo == 2 || Project1.processNo == 1) {
             Application appobj = new Application();
             appobj.application_start();
         }
+        //}
 
         /*
          * for (int i = 0; i < 5; i++) { Message1 msg = new Message1("Hello",
@@ -142,10 +149,13 @@ public class Project1 {
     }
 
     public static void cs_enter() {
+    	
         if (Project1.hasToken) {
             System.out.println("Process \t" + Project1.processNo
                     + "\t has entered CS at \t" + System.currentTimeMillis());
             Project1.isUsingCS = true;
+            String fileContent = "has entered CS at \t"+System.currentTimeMillis();
+            writeToFile(fileContent);
             cs_leave();
         } else {
             Message1 request = new Message1("request", Project1.processNo);
@@ -177,16 +187,26 @@ public class Project1 {
             Queue<Integer> UnfulfilledReqQueue = Project1.token
                     .getUnfulfilledRequestsQueue();
             for (int i = 0; i < vectorClock.length; i++) {
+            	System.out.println("fulfilledRequests["+i+"]\t"+fulfilledRequests[i]+"vectorClock["+i+"]\t"+vectorClock[i] );
                 if (vectorClock[i] > fulfilledRequests[i]) {
                 	//Project1.vectorClock.displayClock();
-                	System.out.println("fulfilledRequests[i]"+fulfilledRequests[i]+"vectorClock[i]"+vectorClock[i] );
+                	
                     if (!UnfulfilledReqQueue.contains(i))
+                    {
                         UnfulfilledReqQueue.add(i);
+                    System.out.println("\n Queue After Adding unfulfiiled Request");
+                    for(Integer k : UnfulfilledReqQueue)
+                    	System.out.print("\n \t"+k);
+                    }
                 }
             }
             if (!Project1.token.unfulfilledRequestsQueue.isEmpty())
             {
             int toGiveToken = UnfulfilledReqQueue.poll();
+            System.out.println("\n Queue After Popping");
+            for(Integer k : UnfulfilledReqQueue)
+            	System.out.print("\n \t"+k);
+            
             Project1.token.setUnfulfilledRequestsQueue(UnfulfilledReqQueue);
             Message1 tokenMsg = new Message1("token", Project1.processNo,Project1.token);
             System.out.println("\nToken for fulfilled reqs\n");
@@ -195,7 +215,10 @@ public class Project1 {
             //tokenMsg.setVectorClock(Project1.vectorClock);
             Project1.messageQueue.add(tokenMsg);
             }
+            
             Project1.isUsingCS = false;
+            String fileContent = "has left CS at \t"+System.currentTimeMillis();
+            writeToFile(fileContent);
        // }
     }
 
@@ -255,6 +278,48 @@ public class Project1 {
 
         }
 
+    }
+    
+    static void writeToFile(String toPrint)
+    {
+    	String content = "Process No:\t"+Project1.processNo+"\t"+toPrint;
+ 
+		//File file = new File("./config/SharedResource.txt");
+		
+		//FileChannel channel = new RandomAccessFile(file, "rw").getChannel();
+ 
+		// if file doesnt exists, then create it
+		//if (!file.exists()) {
+			//file.createNewFile();
+		//}
+		//FileLock lock = channel.lock(); 
+		//FileWriter fw = new FileWriter(file.getAbsoluteFile());
+		//BufferedWriter bw = new BufferedWriter(fw);
+		//bw.write(content);
+		//bw.close();
+		
+		try {
+		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("./config/SharedResource.txt", true)));
+		    out.println(content);
+		    out.close();
+		} catch (IOException e) {
+		    //exception handling left as an exercise for the reader
+		}
+		
+		/*try {
+		    lock = channel.tryLock();
+		} catch (OverlappingFileLockException e) {
+		    // File is already locked in this thread or virtual machine
+			e.printStackTrace();
+		}*/
+
+		// Release the lock
+		//lock.release();
+
+		// Close the file
+		//channel.close();
+ 
+		System.out.println("Done");
     }
 
 }

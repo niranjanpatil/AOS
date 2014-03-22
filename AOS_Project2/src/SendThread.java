@@ -52,7 +52,7 @@ public class SendThread implements Runnable {
                 if (msg.getMsg().equalsIgnoreCase("token")) {
                 	System.out.println("\n Fulfilled Requests Vector in send thread");
                 	msg.token.displayfulfilledRequestsVector();
-                	System.out.println("\n UnFulfilled Requests Vector in send thread");
+                	System.out.println("\n UnFulfilled Requests Queue in send thread");
                 	msg.token.displayQueue();
                 	
                 	

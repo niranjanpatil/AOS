@@ -1,0 +1,6 @@
+Process No:	2	has entered CS at 	1395524672967
+Process No:	2	has left CS at 	1395524672970
+Process No:	1	has entered CS at 	1395524675799
+Process No:	1	has left CS at 	1395524675827
+Process No:	3	has entered CS at 	1395524675888
+Process No:	3	has left CS at 	1395524675906
