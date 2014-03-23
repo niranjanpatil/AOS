@@ -126,7 +126,8 @@ public class RecvThread implements Runnable {
                             	System.out.println("\n ====Token received== \n");
                             	receivedMsg.token.displayfulfilledRequestsVector();
                                 Project1.hasToken = true;
-                                Project1.cs_enter();
+                                //Project1.cs_enter();
+                                Application.obj.cs_enter();
                             }
                             // condition to check if i have received BYE
                             if (messageType.equalsIgnoreCase("Bye")) {

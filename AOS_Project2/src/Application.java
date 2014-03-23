@@ -1,22 +1,42 @@
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
-import java.nio.channels.OverlappingFileLockException;
+
+
+
 
 public class Application {
-    void application_start() {
-        Project1 obj = new Project1();
-        obj.cs_enter();
+	static MutualExclusionService obj = new MutualExclusionServiceImpl();
+	
+	static boolean canRaiseRequest= true;
+    void application_start() throws InterruptedException {
+        //Project1 obj = new Project1();
+        //obj.cs_enter();
+    	
+    	int noOfRequests = 10;
+    	
+    	while(noOfRequests >0)
+    	{
+    		if(canRaiseRequest)
+    		{
+    			Thread.sleep(1000);
+    		 obj.cs_enter();
+    		 noOfRequests--;
+    		}
+    		
+//    		if(noOfRequests==0)
+//    		{
+//    			break;
+//    		}
+    		
+    		
+    	}
+    		
+        
+       
         //obj.cs_leave();
         //writeToFile();
         
     }
     
-    void writeToFile()
+  /* void writeToFile()
     {
     	try {
     		 
@@ -27,9 +47,9 @@ public class Application {
 			FileChannel channel = new RandomAccessFile(file, "rw").getChannel();
  
 			// if file doesnt exists, then create it
-			/*if (!file.exists()) {
+			if (!file.exists()) {
 				file.createNewFile();
-			}*/
+			}
 			FileLock lock = channel.lock(); 
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
@@ -54,6 +74,7 @@ public class Application {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    }
+    }*/
+    
 
 }

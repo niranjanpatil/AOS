@@ -1,11 +1,16 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
+import java.nio.channels.OverlappingFileLockException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -148,7 +153,7 @@ public class Project1 {
 
     }
 
-    public static void cs_enter() {
+    /*public static void cs_enter() {
     	
         if (Project1.hasToken) {
             System.out.println("Process \t" + Project1.processNo
@@ -220,7 +225,7 @@ public class Project1 {
             String fileContent = "has left CS at \t"+System.currentTimeMillis();
             writeToFile(fileContent);
        // }
-    }
+    }*/
 
     public void createConnections(int processNo) {
 
@@ -285,14 +290,26 @@ public class Project1 {
     	String content = "Process No:\t"+Project1.processNo+"\t"+toPrint;
  
 		//File file = new File("./config/SharedResource.txt");
+    	/*FileChannel channel=null;
 		
-		//FileChannel channel = new RandomAccessFile(file, "rw").getChannel();
+		try {
+			channel = new RandomAccessFile("./config/SharedResource.txt", "rw").getChannel();
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
  
 		// if file doesnt exists, then create it
 		//if (!file.exists()) {
 			//file.createNewFile();
 		//}
-		//FileLock lock = channel.lock(); 
+		FileLock fileLock=null;
+		try {
+			fileLock = channel.lock();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} */
 		//FileWriter fw = new FileWriter(file.getAbsoluteFile());
 		//BufferedWriter bw = new BufferedWriter(fw);
 		//bw.write(content);
@@ -303,21 +320,34 @@ public class Project1 {
 		    out.println(content);
 		    out.close();
 		} catch (IOException e) {
-		    //exception handling left as an exercise for the reader
+		    e.printStackTrace();
 		}
 		
 		/*try {
-		    lock = channel.tryLock();
+		    fileLock = channel.tryLock();
 		} catch (OverlappingFileLockException e) {
 		    // File is already locked in this thread or virtual machine
 			e.printStackTrace();
-		}*/
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Release the lock
-		//lock.release();
+		try {
+			fileLock.release();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 
 		// Close the file
-		//channel.close();
+		/*try {
+			channel.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
  
 		System.out.println("Done");
     }
