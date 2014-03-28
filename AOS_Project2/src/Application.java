@@ -1,80 +1,70 @@
 
-
-
-
 public class Application {
 	static MutualExclusionService obj = new MutualExclusionServiceImpl();
 	
 	static boolean canRaiseRequest= true;
+	static int noOfRequests = 10;
+	static boolean canexecute_cs_leave=false;
+	static boolean canTerminate=false;
+	static boolean insideCSLeave=false;
     void application_start() throws InterruptedException {
         //Project1 obj = new Project1();
         //obj.cs_enter();
     	
-    	int noOfRequests = 10;
     	
-    	while(noOfRequests >0)
+    	
+    	while(true)
     	{
     		if(canRaiseRequest)
     		{
-    			Thread.sleep(1000);
-    		 obj.cs_enter();
-    		 noOfRequests--;
+    	//	Thread.sleep(400);
+    			canexecute_cs_leave=false;
+    			obj.cs_enter();
     		}
     		
-//    		if(noOfRequests==0)
-//    		{
-//    			break;
-//    		}
+    		if(canexecute_cs_leave && !insideCSLeave)
+    		{
+    			obj.cs_leave();
+    			noOfRequests--;
+    			
+    			if(noOfRequests==0 && !insideCSLeave)
+    			{
+    				canTerminate=true;
+    			}
+    			
+    		}
+		
     		
+    		if(noOfRequests==0)
+    		{
+    		
+    			break;
+    			
+    		}
     		
     	}
-    		
-        
-       
-        //obj.cs_leave();
-        //writeToFile();
-        
+    	
+    	if(canTerminate && !insideCSLeave)
+    	{
+    	//	Thread.sleep(2000);
+    		Message1 msgTerm = new Message1("Bye", Project1.processNo); //
+	        msgTerm.setVectorClock(Project1.vectorClock);
+	        Project1.messageQueue.add(msgTerm);	
+    	}
+    	
+/*
+		if(noOfRequests==0 )
+		{
+			Thread.sleep(6000*Project1.no_of_nodes);
+	    	Message1 msgTerm = new Message1("Bye", Project1.processNo); //
+	        msgTerm.setVectorClock(Project1.vectorClock);
+	        Project1.messageQueue.add(msgTerm);		
+    	}*/
+		
     }
-    
-  /* void writeToFile()
-    {
-    	try {
-    		 
-			String content = "Process No:\t"+Project1.processNo+"has written to this file at \t"+System.currentTimeMillis();
- 
-			File file = new File("./config/SharedResource.txt");
-			
-			FileChannel channel = new RandomAccessFile(file, "rw").getChannel();
- 
-			// if file doesnt exists, then create it
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-			FileLock lock = channel.lock(); 
-			FileWriter fw = new FileWriter(file.getAbsoluteFile());
-			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(content);
-			bw.close();
-			
-			try {
-	            lock = channel.tryLock();
-	        } catch (OverlappingFileLockException e) {
-	            // File is already locked in this thread or virtual machine
-	        	e.printStackTrace();
-	        }
-
-	        // Release the lock
-	        lock.release();
-
-	        // Close the file
-	        channel.close();
- 
-			System.out.println("Done");
- 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-    }*/
-    
-
+	
 }
+		
+    	
+    
+    

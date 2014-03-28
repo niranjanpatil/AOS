@@ -73,12 +73,12 @@ public class RecvThread implements Runnable {
                         System.out
                                 .println("\nClock values received with the message");
                         synchronized (Project1.vectorClock) {
-                        	if(!message.equalsIgnoreCase("token"))
+                        	if(!message.equalsIgnoreCase("token") && !message.equalsIgnoreCase("Bye"))
                             receivedMsg.getVectorClock().displayClock();
 
                             if (messageInfo != null
                                     && (message.toString().trim().length() != 0)
-                                    && (!message.equalsIgnoreCase("token"))) {
+                                    && (!message.equalsIgnoreCase("token"))  && (!message.equalsIgnoreCase("Bye"))) {
                                 Project1.vectorClock.receiveEvent(receivedMsg
                                         .getVectorClock().getV(), receivedMsg
                                         .getSenderId());
@@ -92,7 +92,7 @@ public class RecvThread implements Runnable {
                             {
                             	System.out.println("\n Received Token fulfilledRequestsVector");
                             	receivedMsg.token.displayfulfilledRequestsVector();
-                            	System.out.println("\n Received Token Queue");
+                            	System.out.println("\n  *************Token Queue received*************");
                             	receivedMsg.token.displayQueue();
                             	
                             }
@@ -123,7 +123,7 @@ public class RecvThread implements Runnable {
                             	Project1.token.fulfilledRequestsVector=receivedMsg.token.fulfilledRequestsVector.clone();
                             	Project1.token.unfulfilledRequestsQueue=receivedMsg.token.getUnfulfilledRequestsQueue();
                                // Project1 obj = new Project1();
-                            	System.out.println("\n ====Token received== \n");
+                            	System.out.println("\n *************Token received************* \n");
                             	receivedMsg.token.displayfulfilledRequestsVector();
                                 Project1.hasToken = true;
                                 //Project1.cs_enter();
@@ -133,30 +133,30 @@ public class RecvThread implements Runnable {
                             if (messageType.equalsIgnoreCase("Bye")) {
                                 cnt++;
                                 // if i have received BYE from all
-                                if (cnt == nodeCnt - 1) {
-                                    Thread.sleep(1000);
-                                    // sock.close();
-                                    return;
-                                }
+                               
                             }
 
                         }
                     }
                     byteBuffer.clear();
                 }// end for
+                
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ArrayIndexOutOfBoundsException e) {
             } catch (NullPointerException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             } finally {
                 // lock.unlock();
+            }
+            
+            if (cnt == nodeCnt - 1 ) {
+        //        Thread.sleep(1000);
+                // sock.close();
+                return;
             }
 
         }

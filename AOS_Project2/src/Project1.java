@@ -80,10 +80,10 @@ public class Project1 {
         recv.start();
        // for(int i=0;i<5;i++)
         //{
-        if (Project1.processNo == 3 ||Project1.processNo == 2 || Project1.processNo == 1) {
+    //    if (Project1.processNo == 3 ||Project1.processNo == 2 || Project1.processNo == 1) {
             Application appobj = new Application();
             appobj.application_start();
-        }
+      //  }
         //}
 
         /*
@@ -97,11 +97,7 @@ public class Project1 {
          * Project1.messageQueue.add(requestMsg);
          */
 
-        /*
-         * Message1 msgTerm = new Message1("Bye", Project1.processNo); //
-         * msgTerm.setVectorClock(Project1.vectorClock);
-         * Project1.messageQueue.add(msgTerm);
-         */
+        
 
         try {
             send.join();

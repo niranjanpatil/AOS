@@ -63,10 +63,13 @@ public class SendThread implements Runnable {
                 synchronized (Project1.vectorClock) {
                     msg.setVectorClock(Project1.vectorClock);
                 }
+                if(!msg.getMsg().equalsIgnoreCase("token") && !msg.getMsg().equalsIgnoreCase("Bye"))
+                {
                 synchronized (Project1.vectorClock) {
                     Project1.vectorClock.sendEvent();
                     System.out.println("\nClock After Sending \t");
                     Project1.vectorClock.displayClock();
+                }
                 }
 
                 for (int id : clntSock.keySet()) {
